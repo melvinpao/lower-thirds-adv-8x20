@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<!--Animated Lower Thirds v1.5-->
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Lower thirds Source</title>
+	<link rel="stylesheet" href="../common/css/style-source.css">
+	<script src="../common/js/jquery.js"></script>
+
+ </head>
+  <body class="browser-source lower-thirds">
+		<!--Lower third 1-->
+		<div id="lower-third-1" class="alt left style-1 hide-anim">
+			<div id="alt-1-logo" class="logo no-logo"></div>
+			<div class="graph-1"></div>
+			<div class="text-content">
+				<div class="text-mask">
+					<div id="alt-1-name"></div>
+				</div>
+				<div class="text-mask">
+					<div id="alt-1-info"></div>
+				</div>
+			</div>
+			<div class="graph-2"></div>
+		</div>
+
+		<!--Lower third 2-->
+		<div id="lower-third-2" class="alt left style-1 hide-anim">
+			<div id="alt-2-logo" class="logo no-logo"></div>
+			<div class="graph-1"></div>
+			<div class="text-content">
+				<div class="text-mask">
+					<div id="alt-2-name"></div>
+				</div>
+				<div class="text-mask">
+					<div id="alt-2-info"></div>
+				</div>
+			</div>
+			<div class="graph-2"></div>
+		</div>
+
+		<!--Lower third 3-->
+		<div id="lower-third-3" class="alt left style-1 hide-anim">
+			<div id="alt-3-logo" class="logo no-logo"></div>
+			<div class="graph-1"></div>
+			<div class="text-content">
+				<div class="text-mask">
+					<div id="alt-3-name"></div>
+				</div>
+				<div class="text-mask">
+					<div id="alt-3-info"></div>
+				</div>
+			</div>
+			<div class="graph-2"></div>
+		</div>
+
+		<!--Lower third 4-->
+		<div id="lower-third-4" class="alt left style-1 hide-anim">
+			<div id="alt-4-logo" class="logo no-logo"></div>
+			<div class="graph-1"></div>
+			<div class="text-content">
+				<div class="text-mask">
+					<div id="alt-4-name"></div>
+				</div>
+				<div class="text-mask">
+					<div id="alt-4-info"></div>
+				</div>
+			</div>
+			<div class="graph-2"></div>
+		</div>
+
+    <!--Lower third 5 -->
+    <div id="lower-third-5" class="alt left style-1 hide-anim">
+      <div id="alt-5-logo" class="logo no-logo"></div>
+      <div class="graph-1"></div>
+      <div class="text-content">
+        <div class="text-mask">
+          <div id="alt-5-name"></div>
+        </div>
+        <div class="text-mask">
+          <div id="alt-5-info"></div>
+        </div>
+      </div>
+      <div class="graph-2"></div>
+    </div>
+
+    <!--Lower third 6 -->
+    <div id="lower-third-6" class="alt left style-1 hide-anim">
+      <div id="alt-6-logo" class="logo no-logo"></div>
+      <div class="graph-1"></div>
+      <div class="text-content">
+        <div class="text-mask">
+          <div id="alt-6-name"></div>
+        </div>
+        <div class="text-mask">
+          <div id="alt-6-info"></div>
+        </div>
+      </div>
+      <div class="graph-2"></div>
+    </div>
+
+    <!--Lower third 7 -->
+    <div id="lower-third-7" class="alt left style-1 hide-anim">
+      <div id="alt-7-logo" class="logo no-logo"></div>
+      <div class="graph-1"></div>
+      <div class="text-content">
+        <div class="text-mask">
+          <div id="alt-7-name"></div>
+        </div>
+        <div class="text-mask">
+          <div id="alt-7-info"></div>
+        </div>
+      </div>
+      <div class="graph-2"></div>
+    </div>
+
+    <!--Lower third 8 -->
+    <div id="lower-third-8" class="alt left style-1 hide-anim">
+      <div id="alt-8-logo" class="logo no-logo"></div>
+      <div class="graph-1"></div>
+      <div class="text-content">
+        <div class="text-mask">
+          <div id="alt-8-name"></div>
+        </div>
+        <div class="text-mask">
+          <div id="alt-8-info"></div>
+        </div>
+      </div>
+      <div class="graph-2"></div>
+    </div>
+
+
+	<script>
+
+		//Check preview
+		var getUrlParameter = function getUrlParameter(sParam) {
+		    var sPageURL = window.location.search.substring(1),
+		        sURLVariables = sPageURL.split('&'),
+		        sParameterName,
+		        i;
+
+		    for (i = 0; i < sURLVariables.length; i++) {
+		        sParameterName = sURLVariables[i].split('=');
+
+		        if (sParameterName[0] === sParam) {
+		            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+		        }
+		    }
+		};
+
+    var mode = getUrlParameter('mode');
+
+		//Check mode and change de channel to receive switches orders or preview orders
+		if (mode == "preview") {
+			document.body.classList.add('preview');
+			var receiveChannel = 'obs-lower-thirds-preview'; //Preview channel
+		} else {
+			var receiveChannel = 'obs-lower-thirds-channel';
+		}
+
+		var bcp = new BroadcastChannel(receiveChannel); //Receives from the source
+		var bcr = new BroadcastChannel('obs-lower-thirds-channel2'); //Send to Control Panel
+		var bcf = new BroadcastChannel('obs-lower-thirds-fonts');
+
+		var alt_1_logo_image;
+		var alt_1_logo_image_old = alt_1_logo_image;
+		var alt_2_logo_image;
+		var alt_2_logo_image_old = alt_2_logo_image;
+		var alt_3_logo_image;
+		var alt_3_logo_image_old = alt_3_logo_image;
+		var alt_4_logo_image;
+		var alt_4_logo_image_old = alt_4_logo_image;
+    var alt_5_logo_image;
+		var alt_5_logo_image_old = alt_5_logo_image;
+    var alt_6_logo_image;
+		var alt_6_logo_image_old = alt_6_logo_image;
+    var alt_7_logo_image;
+		var alt_7_logo_image_old = alt_7_logo_image;
+    var alt_8_logo_image;
+		var alt_8_logo_image_old = alt_8_logo_image;
+
+		var alt_1_animation_time;
+
+		var global_animation_time;
+		var activeTime;
+		var inactiveTime;
+
+		var canIn1 = false;
+		var canIn2 = false;
+		var canIn3 = false;
+		var canIn4 = false;
+    var canIn5 = false;
+    var canIn6 = false;
+    var canIn7 = false;
+    var canIn8 = false;
+
+
+		var c1 = 0;
+		var d1 = 0;
+		var t1;
+		var s1;
+
+		var c2 = 0;
+		var d2 = 0;
+		var t2;
+		var s2;
+
+		var c3 = 0;
+		var d3 = 0;
+		var t3;
+		var s3;
+
+		var c4 = 0;
+		var d4 = 0;
+		var t4;
+		var s4;
+
+    var c5 = 0;
+		var d5 = 0;
+		var t5;
+		var s5;
+
+    var c6 = 0;
+		var d6 = 0;
+		var t6;
+		var s6;
+
+    var c7 = 0;
+		var d7 = 0;
+		var t7;
+		var s7;
+
+    var c8 = 0;
+		var d8 = 0;
+		var t8;
+		var s8;
+
+		var activeTime1_to_send;
+		var inactiveTime1_to_send;
+		var activeTime2_to_send;
+		var inactiveTime2_to_send;
+		var activeTime3_to_send;
+		var inactiveTime3_to_send;
+		var activeTime4_to_send;
+		var inactiveTime4_to_send;
+    var activeTime5_to_send;
+		var inactiveTime5_to_send;
+    var activeTime6_to_send;
+    var inactiveTime6_to_send;
+    var activeTime7_to_send;
+    var inactiveTime7_to_send;
+    var activeTime8_to_send;
+    var inactiveTime8_to_send;
+
+		var active1IsOn = 0;
+		var inactive1IsOn = 0;
+		var active2IsOn = 0;
+		var inactive2IsOn = 0;
+		var active3IsOn = 0;
+		var inactive3IsOn = 0;
+		var active4IsOn = 0;
+		var inactive4IsOn = 0;
+    var active5IsOn = 0;
+		var inactive5IsOn = 0;
+    var active6IsOn = 0;
+    var inactive6IsOn = 0;
+    var active7IsOn = 0;
+    var inactive7IsOn = 0;
+    var active8IsOn = 0;
+    var inactive8IsOn = 0;
+
+		var alt_1_logo_switch;
+		var alt_1_logo_switch_old = alt_1_logo_switch;
+		var alt_1_align = "left";
+		var alt_1_align_old = alt_1_align;
+		var alt_1_style;
+		var alt_1_style_old = alt_1_style;
+
+		var alt_2_logo_switch;
+		var alt_2_logo_switch_old = alt_2_logo_switch;
+		var alt_2_align = "left";
+		var alt_2_align_old = alt_2_align;
+		var alt_2_style;
+		var alt_2_style_old = alt_2_style;
+
+		var alt_3_logo_switch;
+		var alt_3_logo_switch_old = alt_3_logo_switch;
+		var alt_3_align = "left";
+		var alt_3_align_old = alt_3_align;
+		var alt_3_style;
+		var alt_3_style_old = alt_3_style;
+
+		var alt_4_logo_switch;
+		var alt_4_logo_switch_old = alt_4_logo_switch;
+		var alt_4_align = "left";
+		var alt_4_align_old = alt_4_align;
+		var alt_4_style;
+		var alt_4_style_old = alt_4_style;
+
+    var alt_5_logo_switch;
+		var alt_5_logo_switch_old = alt_5_logo_switch;
+		var alt_5_align = "left";
+		var alt_5_align_old = alt_5_align;
+		var alt_5_style;
+		var alt_5_style_old = alt_5_style;
+
+    var alt_6_logo_switch;
+		var alt_6_logo_switch_old = alt_6_logo_switch;
+		var alt_6_align = "left";
+		var alt_6_align_old = alt_6_align;
+		var alt_6_style;
+		var alt_6_style_old = alt_6_style;
+
+    var alt_7_logo_switch;
+		var alt_7_logo_switch_old = alt_7_logo_switch;
+		var alt_7_align = "left";
+		var alt_7_align_old = alt_7_align;
+		var alt_7_style;
+		var alt_7_style_old = alt_7_style;
+
+    var alt_8_logo_switch;
+		var alt_8_logo_switch_old = alt_8_logo_switch;
+		var alt_8_align = "left";
+		var alt_8_align_old = alt_8_align;
+		var alt_8_style;
+		var alt_8_style_old = alt_8_style;
+
+		var alt_1_wait_hide_logo;
+		var alt_2_wait_hide_logo;
+		var alt_3_wait_hide_logo;
+		var alt_4_wait_hide_logo;
+    var alt_5_wait_hide_logo;
+    var alt_6_wait_hide_logo;
+    var alt_7_wait_hide_logo;
+    var alt_8_wait_hide_logo;
+
+		var hide_logo_1 = false;
+		var hide_logo_2 = false;
+		var hide_logo_3 = false;
+		var hide_logo_4 = false;
+    var hide_logo_5 = false;
+    var hide_logo_6 = false;
+    var hide_logo_7 = false;
+    var hide_logo_8 = false;
+
+
+		function animationIn(animation) {
+      console.log(animation);
+			elementAnim = document.getElementById(animation);
+			document.getElementById(animation).classList.remove("animation-out");
+			void elementAnim.offsetWidth;
+			document.getElementById(animation).classList.add("animation-in");
+		}
+
+		function animationOut(animation) {
+			elementAnim = document.getElementById(animation);
+			document.getElementById(animation).classList.remove("animation-in");
+			void elementAnim.offsetWidth;
+			document.getElementById(animation).classList.add("animation-out");
+		}
+
+		// Active time counter (Lower Third 1)
+		function activeCount1(i) {
+		  if (c1 <= alt_1_active_time){
+		    c1 = c1 + 1;
+		    t1 = setTimeout(activeCount1, 1000, i);
+		  } else {
+		      stopTimeCount(i);
+		      startInactiveCount(i);
+		  }
+		}
+
+		// Inactive time counter (Lower Third 1)
+		function inactiveCount1(i) {
+		  if (d1 <= alt_1_inactive_time){
+		    d1 = d1 + 1;
+		    s1 = setTimeout(inactiveCount1, 1000, i);
+		  } else {
+		      startActiveCount(i);
+		      d1 = 0;
+		      clearTimeout(s1);
+		      inactive1IsOn = 0;
+		  }
+		}
+
+		// Active time counter (Lower Third 2)
+		function activeCount2(i) {
+		  if (c2 <= alt_2_active_time){
+		    c2 = c2 + 1;
+		    t2 = setTimeout(activeCount2, 1000, i);
+		  } else {
+		      stopTimeCount(i);
+		      startInactiveCount(i);
+		  }
+		}
+
+		// Inactive time counter (Lower Third 2)
+		function inactiveCount2(i) {
+		  if (d2 <= alt_2_inactive_time){
+		    d2 = d2 + 1;
+		    s2 = setTimeout(inactiveCount2, 1000, i);
+		  } else {
+		      startActiveCount(i);
+		      d2 = 0;
+		      clearTimeout(s2);
+		      inactive2IsOn = 0;
+		  }
+		}
+
+		// Active time counter (Lower Third 3)
+		function activeCount3(i) {
+		  if (c3 <= alt_3_active_time){
+		    c3 = c3 + 1;
+		    t3 = setTimeout(activeCount3, 1000, i);
+		  } else {
+		      stopTimeCount(i);
+		      startInactiveCount(i);
+		  }
+		}
+
+		// Inactive time counter (Lower Third 3)
+		function inactiveCount3(i) {
+		  if (d3 <= alt_3_inactive_time){
+		    d3 = d3 + 1;
+		    s3 = setTimeout(inactiveCount3, 1000, i);
+		  } else {
+		      startActiveCount(i);
+		      d3 = 0;
+		      clearTimeout(s3);
+		      inactive3IsOn = 0;
+		  }
+		}
+
+		// Active time counter (Lower Third 4)
+		function activeCount4(i) {
+		  if (c4 <= alt_4_active_time){
+		    c4 = c4 + 1;
+		    t4 = setTimeout(activeCount4, 1000, i);
+		  } else {
+		      stopTimeCount(i);
+		      startInactiveCount(i);
+		  }
+		}
+
+		// Inactive time counter (Lower Third 4)
+		function inactiveCount4(i) {
+		  if (d4 <= alt_4_inactive_time){
+		    d4 = d4 + 1;
+		    s4 = setTimeout(inactiveCount4, 1000, i);
+		  } else {
+		      startActiveCount(i);
+		      d4 = 0;
+		      clearTimeout(s4);
+		      inactive4IsOn = 0;
+		  }
+		}
+
+    // Active time counter (Lower Third 5)
+		function activeCount5(i) {
+		  if (c5 <= alt_5_active_time){
+		    c5 = c5 + 1;
+		    t5 = setTimeout(activeCount5, 1000, i);
+		  } else {
+		      stopTimeCount(i);
+		      startInactiveCount(i);
+		  }
+		}
+
+		// Inactive time counter (Lower Third 5)
+		function inactiveCount5(i) {
+		  if (d5 <= alt_5_inactive_time){
+		    d5 = d5 + 1;
+		    s5 = setTimeout(inactiveCount5, 1000, i);
+		  } else {
+		      startActiveCount(i);
+		      d5 = 0;
+		      clearTimeout(s5);
+		      inactive5IsOn = 0;
+		  }
+		}
+
+    // Active time counter (Lower Third 6)
+    function activeCount6(i) {
+      if (c6 <= alt_6_active_time){
+        c6 = c6 + 1;
+        t6 = setTimeout(activeCount6, 1000, i);
+      } else {
+          stopTimeCount(i);
+          startInactiveCount(i);
+      }
+    }
+
+    // Inactive time counter (Lower Third 6)
+    function inactiveCount6(i) {
+      if (d6 <= alt_6_inactive_time){
+        d6 = d6 + 1;
+        s6 = setTimeout(inactiveCount6, 1000, i);
+      } else {
+          startActiveCount(i);
+          d6 = 0;
+          clearTimeout(s6);
+          inactive6IsOn = 0;
+      }
+    }
+
+    // Active time counter (Lower Third 7)
+    function activeCount7(i) {
+      if (c7 <= alt_7_active_time){
+        c7 = c7 + 1;
+        t7 = setTimeout(activeCount7, 1000, i);
+      } else {
+          stopTimeCount(i);
+          startInactiveCount(i);
+      }
+    }
+
+    // Inactive time counter (Lower Third 7)
+    function inactiveCount7(i) {
+      if (d7 <= alt_7_inactive_time){
+        d7 = d7 + 1;
+        s7 = setTimeout(inactiveCount7, 1000, i);
+      } else {
+          startActiveCount(i);
+          d7 = 0;
+          clearTimeout(s7);
+          inactive7IsOn = 0;
+      }
+    }
+
+    // Active time counter (Lower Third 8)
+    function activeCount8(i) {
+      if (c8 <= alt_8_active_time){
+        c8 = c8 + 1;
+        t8 = setTimeout(activeCount8, 1000, i);
+      } else {
+          stopTimeCount(i);
+          startInactiveCount(i);
+      }
+    }
+
+    // Inactive time counter (Lower Third 8)
+    function inactiveCount8(i) {
+      if (d8 <= alt_8_inactive_time){
+        d8 = d8 + 1;
+        s8 = setTimeout(inactiveCount8, 1000, i);
+      } else {
+          startActiveCount(i);
+          d8 = 0;
+          clearTimeout(s8);
+          inactive8IsOn = 0;
+      }
+    }
+
+		// Can start Active time counter? Start Animation In
+		function startActiveCount(i) {
+		  if (!active1IsOn) {
+		  	activeIs1On = true;
+			if (i == "lower-third-1"){
+				activeCount1(i);
+				animationIn(i);
+			}
+		  }
+
+		  if (!active2IsOn) {
+		  	activeIs2On = true;
+			if (i == "lower-third-2"){
+				activeCount2(i);
+				animationIn(i);
+			}
+		  }
+
+		  if (!active3IsOn) {
+		  	activeIs3On = true;
+			if (i == "lower-third-3"){
+				activeCount3(i);
+				animationIn(i);
+			}
+		  }
+
+		  if (!active4IsOn) {
+		  	activeIs4On = true;
+			if (i == "lower-third-4"){
+				activeCount4(i);
+				animationIn(i);
+			}
+		  }
+
+      if (!active5IsOn) {
+		  	activeIs5On = true;
+			if (i == "lower-third-5"){
+				activeCount5(i);
+				animationIn(i);
+			}
+		  }
+
+      if (!active6IsOn) {
+		  	activeIs6On = true;
+			if (i == "lower-third-6"){
+				activeCount6(i);
+				animationIn(i);
+			}
+		  }
+
+      if (!active7IsOn) {
+		  	activeIs7On = true;
+			if (i == "lower-third-7"){
+				activeCount7(i);
+				animationIn(i);
+			}
+		  }
+
+      if (!active8IsOn) {
+        activeIs8On = true;
+      if (i == "lower-third-8"){
+        activeCount8(i);
+        animationIn(i);
+      }
+      }
+
+		}
+
+		// Can start Inactive time counter? Start Animation Out
+		function startInactiveCount(i) {
+		  if (!inactive1IsOn) {
+		    inactive1IsOn = true;
+		    if (i == "lower-third-1"){
+			    inactiveCount1(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive2IsOn) {
+		    inactive2IsOn = true;
+			if (i == "lower-third-2"){
+			    inactiveCount2(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive3IsOn) {
+		    inactive3IsOn = true;
+			if (i == "lower-third-3"){
+			    inactiveCount3(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive4IsOn) {
+		    inactive4IsOn = true;
+			if (i == "lower-third-4"){
+			    inactiveCount4(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive5IsOn) {
+		    inactive5IsOn = true;
+			if (i == "lower-third-5"){
+			    inactiveCount5(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive6IsOn) {
+		    inactive6IsOn = true;
+			if (i == "lower-third-6"){
+			    inactiveCount6(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive7IsOn) {
+		    inactive7IsOn = true;
+			if (i == "lower-third-7"){
+			    inactiveCount7(i);
+			    animationOut(i);
+			}
+		  }
+
+      if (!inactive8IsOn) {
+		    inactive8IsOn = true;
+			if (i == "lower-third-8"){
+			    inactiveCount8(i);
+			    animationOut(i);
+			}
+		  }
+		}
+
+		// Stop active and inactive states.
+		function stopTimeCount(i) {
+		  if (i == "lower-third-1"){
+			c1 = 0;
+			clearTimeout(t1);
+			active1IsOn = 0;
+			d1 = 0;
+			clearTimeout(s1);
+			inactive1IsOn = 0;
+		  }
+		  if (i == "lower-third-2"){
+			c2 = 0;
+			clearTimeout(t2);
+			active2IsOn = 0;
+			d2 = 0;
+			clearTimeout(s2);
+			inactive2IsOn = 0;
+		  }
+		  if (i == "lower-third-3"){
+			c3 = 0;
+			clearTimeout(t3);
+			active3IsOn = 0;
+			d3 = 0;
+			clearTimeout(s3);
+			inactive3IsOn = 0;
+		  }
+		  if (i == "lower-third-4"){
+			c4 = 0;
+			clearTimeout(t4);
+			active4IsOn = 0;
+			d4 = 0;
+			clearTimeout(s4);
+			inactive4IsOn = 0;
+		  }
+      if (i == "lower-third-5"){
+			c5 = 0;
+			clearTimeout(t5);
+			active5IsOn = 0;
+			d5 = 0;
+			clearTimeout(s5);
+			inactive5IsOn = 0;
+		  }
+      if (i == "lower-third-6"){
+			c6 = 0;
+			clearTimeout(t6);
+			active6IsOn = 0;
+			d6 = 0;
+			clearTimeout(s6);
+			inactive6IsOn = 0;
+		  }
+      if (i == "lower-third-7"){
+			c7 = 0;
+			clearTimeout(t7);
+			active7IsOn = 0;
+			d7 = 0;
+			clearTimeout(s7);
+			inactive7IsOn = 0;
+		  }
+      if (i == "lower-third-8"){
+			c8 = 0;
+			clearTimeout(t8);
+			active8IsOn = 0;
+			d8 = 0;
+			clearTimeout(s8);
+			inactive8IsOn = 0;
+		  }
+
+		  animationOut(i);
+		}
+
+		///////////////////////////
+
+		bcp.onmessage = function (ev) {
+			received_data=ev.data.split("|");
+			global_animation_time = received_data[0];
+			if (mode != "preview") {
+				activeTime = received_data[1];
+			} else {
+				activeTime = "0";
+			}
+			inactiveTime = received_data[2];
+
+			//Animated Lower Thirds 1
+			alt_1_switch = received_data[3];
+			alt_1_style = received_data[4];
+			document.getElementById("alt-1-name").innerHTML = received_data[5];
+			document.getElementById("alt-1-info").innerHTML = received_data[6];
+			alt_1_name_size = received_data[7];
+			alt_1_info_size = received_data[8];
+			alt_1_name_transform = received_data[9];
+			alt_1_info_transform = received_data[10];
+			alt_1_name_weight = received_data[11];
+			alt_1_info_weight = received_data[12];
+			alt_1_name_color = received_data[13];
+			alt_1_info_color = received_data[14];
+			alt_1_style_color_1 = received_data[15];
+			alt_1_style_color_2 = received_data[16];
+			alt_1_logo_switch = received_data[17];
+			alt_1_background_switch = received_data[18];
+			alt_1_shadows = received_data[19];
+			alt_1_align = received_data[20];
+			alt_1_size = received_data[21];
+			alt_1_margin_h = received_data[22];
+			alt_1_margin_v = received_data[23];
+			alt_1_line_spacing = received_data[24] * 0.1;
+			alt_1_font = received_data [25];
+
+			//Animated Lower Thirds 2
+			alt_2_switch = received_data[26];
+			alt_2_style = received_data[27];
+			document.getElementById("alt-2-name").innerHTML = received_data[28];
+			document.getElementById("alt-2-info").innerHTML = received_data[29];
+			alt_2_name_size = received_data[30];
+			alt_2_info_size = received_data[31];
+			alt_2_name_transform = received_data[32];
+			alt_2_info_transform = received_data[33];
+			alt_2_name_weight = received_data[34];
+			alt_2_info_weight = received_data[35];
+			alt_2_name_color = received_data[36];
+			alt_2_info_color = received_data[37];
+			alt_2_style_color_1 = received_data[38];
+			alt_2_style_color_2 = received_data[39];
+			alt_2_logo_switch = received_data[40];
+			alt_2_background_switch = received_data[41];
+			alt_2_shadows = received_data[42];
+			alt_2_align = received_data[43];
+			alt_2_size = received_data[44];
+			alt_2_margin_h = received_data[45];
+			alt_2_margin_v = received_data[46];
+			alt_2_line_spacing = received_data[47] * 0.1;
+			alt_2_font = received_data [48];
+
+			//Animated Lower Thirds 3
+			alt_3_switch = received_data[49];
+			alt_3_style = received_data[50];
+			document.getElementById("alt-3-name").innerHTML = received_data[51];
+			document.getElementById("alt-3-info").innerHTML = received_data[52];
+			alt_3_name_size = received_data[53];
+			alt_3_info_size = received_data[54];
+			alt_3_name_transform = received_data[55];
+			alt_3_info_transform = received_data[56];
+			alt_3_name_weight = received_data[57];
+			alt_3_info_weight = received_data[58];
+			alt_3_name_color = received_data[59];
+			alt_3_info_color = received_data[60];
+			alt_3_style_color_1 = received_data[61];
+			alt_3_style_color_2 = received_data[62];
+			alt_3_logo_switch = received_data[63];
+			alt_3_background_switch = received_data[64];
+			alt_3_shadows = received_data[65];
+			alt_3_align = received_data[66];
+			alt_3_size = received_data[67];
+			alt_3_margin_h = received_data[68];
+			alt_3_margin_v = received_data[69];
+			alt_3_line_spacing = received_data[70] * 0.1;
+			alt_3_font = received_data [71];
+
+			//Animated Lower Thirds 4
+			alt_4_switch = received_data[72];
+			alt_4_style = received_data[73];
+			document.getElementById("alt-4-name").innerHTML = received_data[74];
+			document.getElementById("alt-4-info").innerHTML = received_data[75];
+			alt_4_name_size = received_data[76];
+			alt_4_info_size = received_data[77];
+			alt_4_name_transform = received_data[78];
+			alt_4_info_transform = received_data[79];
+			alt_4_name_weight = received_data[80];
+			alt_4_info_weight = received_data[81];
+			alt_4_name_color = received_data[82];
+			alt_4_info_color = received_data[83];
+			alt_4_style_color_1 = received_data[84];
+			alt_4_style_color_2 = received_data[85];
+			alt_4_logo_switch = received_data[86];
+			alt_4_background_switch = received_data[87];
+			alt_4_shadows = received_data[88];
+			alt_4_align = received_data[89];
+			alt_4_size = received_data[90];
+			alt_4_margin_h = received_data[91];
+			alt_4_margin_v = received_data[92];
+			alt_4_line_spacing = received_data[93] * 0.1;
+			alt_4_font = received_data[94];
+
+      //Animated Lower Thirds 5
+			alt_5_switch = received_data[95];
+			alt_5_style = received_data[96];
+			document.getElementById("alt-5-name").innerHTML = received_data[97];
+			document.getElementById("alt-5-info").innerHTML = received_data[98];
+			alt_5_name_size = received_data[99];
+			alt_5_info_size = received_data[100];
+			alt_5_name_transform = received_data[101];
+			alt_5_info_transform = received_data[102];
+			alt_5_name_weight = received_data[103];
+			alt_5_info_weight = received_data[104];
+			alt_5_name_color = received_data[105];
+			alt_5_info_color = received_data[106];
+			alt_5_style_color_1 = received_data[107];
+			alt_5_style_color_2 = received_data[108];
+			alt_5_logo_switch = received_data[109];
+			alt_5_background_switch = received_data[110];
+			alt_5_shadows = received_data[111];
+			alt_5_align = received_data[112];
+			alt_5_size = received_data[113];
+			alt_5_margin_h = received_data[114];
+			alt_5_margin_v = received_data[115];
+			alt_5_line_spacing = received_data[116] * 0.1;
+			alt_5_font = received_data[117];
+
+      //Animated Lower Thirds 6
+      alt_6_switch = received_data[118];
+      alt_6_style = received_data[119];
+      document.getElementById("alt-6-name").innerHTML = received_data[120];
+      document.getElementById("alt-6-info").innerHTML = received_data[121];
+      alt_6_name_size = received_data[122];
+      alt_6_info_size = received_data[123];
+      alt_6_name_transform = received_data[124];
+      alt_6_info_transform = received_data[124];
+      alt_6_name_weight = received_data[126];
+      alt_6_info_weight = received_data[127];
+      alt_6_name_color = received_data[128];
+      alt_6_info_color = received_data[129];
+      alt_6_style_color_1 = received_data[130];
+      alt_6_style_color_2 = received_data[131];
+      alt_6_logo_switch = received_data[132];
+      alt_6_background_switch = received_data[133];
+      alt_6_shadows = received_data[134];
+      alt_6_align = received_data[135];
+      alt_6_size = received_data[136];
+      alt_6_margin_h = received_data[137];
+      alt_6_margin_v = received_data[138];
+      alt_6_line_spacing = received_data[139] * 0.1;
+      alt_6_font = received_data[140];
+
+      //Animated Lower Thirds 7
+      alt_7_switch = received_data[141];
+      alt_7_style = received_data[142];
+      document.getElementById("alt-7-name").innerHTML = received_data[143];
+      document.getElementById("alt-7-info").innerHTML = received_data[144];
+      alt_7_name_size = received_data[145];
+      alt_7_info_size = received_data[146];
+      alt_7_name_transform = received_data[147];
+      alt_7_info_transform = received_data[148];
+      alt_7_name_weight = received_data[149];
+      alt_7_info_weight = received_data[150];
+      alt_7_name_color = received_data[151];
+      alt_7_info_color = received_data[152];
+      alt_7_style_color_1 = received_data[153];
+      alt_7_style_color_2 = received_data[154];
+      alt_7_logo_switch = received_data[155];
+      alt_7_background_switch = received_data[156];
+      alt_7_shadows = received_data[157];
+      alt_7_align = received_data[158];
+      alt_7_size = received_data[159];
+      alt_7_margin_h = received_data[160];
+      alt_7_margin_v = received_data[161];
+      alt_7_line_spacing = received_data[162] * 0.1;
+      alt_7_font = received_data[163];
+
+      //Animated Lower Thirds 8
+      alt_8_switch = received_data[164];
+      alt_8_style = received_data[165];
+      document.getElementById("alt-8-name").innerHTML = received_data[166];
+      document.getElementById("alt-8-info").innerHTML = received_data[167];
+      alt_8_name_size = received_data[168];
+      alt_8_info_size = received_data[169];
+      alt_8_name_transform = received_data[170];
+      alt_8_info_transform = received_data[171];
+      alt_8_name_weight = received_data[172];
+      alt_8_info_weight = received_data[173];
+      alt_8_name_color = received_data[174];
+      alt_8_info_color = received_data[175];
+      alt_8_style_color_1 = received_data[176];
+      alt_8_style_color_2 = received_data[177];
+      alt_8_logo_switch = received_data[178];
+      alt_8_background_switch = received_data[179];
+      alt_8_shadows = received_data[180];
+      alt_8_align = received_data[181];
+      alt_8_size = received_data[182];
+      alt_8_margin_h = received_data[183];
+      alt_8_margin_v = received_data[184];
+      alt_8_line_spacing = received_data[185] * 0.1;
+      alt_8_font = received_data[186];
+
+			//Use the global times settins if custom times is empty
+			alt_1_animation_time = (received_data [187]) ? received_data [187] : received_data[0];
+			alt_1_active_time = (received_data [188]) ? received_data [188] : received_data[1];
+			alt_1_inactive_time = (received_data [189]) ? received_data [189] : received_data[2];
+
+			alt_2_animation_time = (received_data [190]) ? received_data [190] : received_data[0];
+			alt_2_active_time = (received_data [191]) ? received_data [191] : received_data[1];
+			alt_2_inactive_time = (received_data [192]) ? received_data [192] : received_data[2];
+
+			alt_3_animation_time = (received_data [193]) ? received_data [193] : received_data[0];
+			alt_3_active_time = (received_data [194]) ? received_data [194] : received_data[1];
+			alt_3_inactive_time = (received_data [195]) ? received_data [195] : received_data[2];
+
+			alt_4_animation_time = (received_data [196]) ? received_data [196] : received_data[0];
+			alt_4_active_time = (received_data [197]) ? received_data [197] : received_data[1];
+			alt_4_inactive_time = (received_data [198]) ? received_data [198] : received_data[2];
+
+      alt_5_animation_time = (received_data [199]) ? received_data [199] : received_data[0];
+			alt_5_active_time = (received_data [200]) ? received_data [200] : received_data[1];
+			alt_5_inactive_time = (received_data [201]) ? received_data [201] : received_data[2];
+
+      alt_6_animation_time = (received_data [202]) ? received_data [202] : received_data[0];
+			alt_6_active_time = (received_data [203]) ? received_data [203] : received_data[1];
+			alt_6_inactive_time = (received_data [204]) ? received_data [204] : received_data[2];
+
+      alt_7_animation_time = (received_data [205]) ? received_data [205] : received_data[0];
+			alt_7_active_time = (received_data [206]) ? received_data [206] : received_data[1];
+			alt_7_inactive_time = (received_data [207]) ? received_data [207] : received_data[2];
+
+      alt_8_animation_time = (received_data [208]) ? received_data [208] : received_data[0];
+			alt_8_active_time = (received_data [209]) ? received_data [209] : received_data[1];
+			alt_8_inactive_time = (received_data [210]) ? received_data [210] : received_data[2];
+
+			alt_1_logo_image = (received_data[211]) ? received_data[211] : "../logos/logo_1.png";
+			alt_2_logo_image = received_data[212];
+			alt_3_logo_image = received_data[213];
+			alt_4_logo_image = received_data[214];
+      alt_5_logo_image = received_data[215];
+      alt_6_logo_image = received_data[216];
+      alt_7_logo_image = received_data[217];
+      alt_8_logo_image = received_data[218];
+      //console.log(received_data[25]);
+
+
+			//Set time infinite in the preview panel
+			if (mode == "preview"){
+				alt_1_active_time = "0";
+				alt_2_active_time = "0";
+				alt_3_active_time = "0";
+				alt_4_active_time = "0";
+        alt_5_active_time = "0";
+        alt_6_active_time = "0";
+        alt_7_active_time = "0";
+        alt_8_active_time = "0";
+			}
+
+			//If active time is 0 the lower thirds is always active (24hs actually)
+			if (activeTime == "0") {
+		    	activeTime = 86400;
+			}
+			if (alt_1_active_time == "0") {
+		    	alt_1_active_time = 86400;
+			}
+			if (alt_2_active_time == "0") {
+		    	alt_2_active_time = 86400;
+			}
+			if (alt_3_active_time == "0") {
+		    	alt_3_active_time = 86400;
+			}
+			if (alt_4_active_time == "0") {
+		    	alt_4_active_time = 86400;
+			}
+      if (alt_5_active_time == "0") {
+		    	alt_5_active_time = 86400;
+			}
+      if (alt_6_active_time == "0") {
+		    	alt_6_active_time = 86400;
+			}
+      if (alt_7_active_time == "0") {
+		    	alt_7_active_time = 86400;
+			}
+      if (alt_8_active_time == "0") {
+		    	alt_8_active_time = 86400;
+			}
+
+			//Isn't lower third empty? unhide it
+			if (canIn1) {
+				document.getElementById("lower-third-1").classList.remove("hide-anim");
+			}
+			if (canIn2) {
+				document.getElementById("lower-third-2").classList.remove("hide-anim");
+			}
+			if (canIn3) {
+				document.getElementById("lower-third-3").classList.remove("hide-anim");
+			}
+			if (canIn4) {
+				document.getElementById("lower-third-4").classList.remove("hide-anim");
+			}
+      if (canIn5) {
+				document.getElementById("lower-third-5").classList.remove("hide-anim");
+			}
+      if (canIn6) {
+				document.getElementById("lower-third-6").classList.remove("hide-anim");
+			}
+      if (canIn7) {
+				document.getElementById("lower-third-7").classList.remove("hide-anim");
+			}
+      if (canIn8) {
+				document.getElementById("lower-third-8").classList.remove("hide-anim");
+			}
+
+
+			//Check the switches
+			if (alt_1_switch == "false" || received_data[5].length == 0 || received_data[6].length == 0) {
+				if(canIn1){
+					canIn1 = false;
+					stopTimeCount("lower-third-1");
+				} else {
+					stopTimeCount("lower-third-1");
+				}
+			} else {
+				if(!canIn1){
+					canIn1 = true;
+					startActiveCount("lower-third-1");
+				}
+			};
+
+			if (alt_2_switch == "false" || received_data[28].length == 0 || received_data[29].length == 0) {
+				if(canIn2){
+					canIn2 = false;
+					stopTimeCount("lower-third-2");
+				} else {
+					stopTimeCount("lower-third-2");
+				}
+			} else {
+				if(!canIn2){
+					canIn2 = true;
+					startActiveCount("lower-third-2");
+				}
+			};
+
+			if (alt_3_switch == "false" || received_data[51].length == 0 || received_data[52].length == 0) {
+				if(canIn3){
+					canIn3 = false;
+					stopTimeCount("lower-third-3");
+				} else {
+					stopTimeCount("lower-third-3");
+				}
+			} else {
+				if(!canIn3){
+					canIn3 = true;
+					startActiveCount("lower-third-3");
+				}
+			};
+
+			if (alt_4_switch == "false" || received_data[74].length == 0 || received_data[75].length == 0) {
+				if(canIn4){
+					canIn4 = false;
+					stopTimeCount("lower-third-4");
+				} else {
+					stopTimeCount("lower-third-4");
+				}
+			} else {
+				if(!canIn4){
+					canIn4 = true;
+					startActiveCount("lower-third-4");
+				}
+			};
+
+      if (alt_5_switch == "false" || received_data[97].length == 0 || received_data[98].length == 0) {
+				if(canIn5){
+					canIn5 = false;
+					stopTimeCount("lower-third-5");
+				} else {
+					stopTimeCount("lower-third-5");
+				}
+			} else {
+				if(!canIn5){
+					canIn5 = true;
+					startActiveCount("lower-third-5");
+				}
+			};
+
+      if (alt_6_switch == "false" || received_data[120].length == 0 || received_data[121].length == 0) {
+        if(canIn6){
+          canIn6 = false;
+          stopTimeCount("lower-third-6");
+        } else {
+          stopTimeCount("lower-third-6");
+        }
+      } else {
+        if(!canIn6){
+          canIn6 = true;
+          startActiveCount("lower-third-6");
+        }
+      };
+
+      if (alt_7_switch == "false" || received_data[143].length == 0 || received_data[144].length == 0) {
+        if(canIn7){
+          canIn7 = false;
+          stopTimeCount("lower-third-7");
+        } else {
+          stopTimeCount("lower-third-7");
+        }
+      } else {
+        if(!canIn7){
+          canIn7 = true;
+          startActiveCount("lower-third-7");
+        }
+      };
+
+      if (alt_8_switch == "false" || received_data[166].length == 0 || received_data[167].length == 0) {
+        if(canIn8){
+          canIn8 = false;
+          stopTimeCount("lower-third-8");
+        } else {
+          stopTimeCount("lower-third-8");
+        }
+      } else {
+        if(!canIn8){
+          canIn8 = true;
+          startActiveCount("lower-third-8");
+        }
+      };
+
+			//Change the alignment of the lower third
+			if (alt_1_align != alt_1_align_old){
+				if (alt_1_switch == "false"){
+					document.getElementById("lower-third-1").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-1").classList.replace("left", alt_1_align);
+				document.getElementById("lower-third-1").classList.replace("center", alt_1_align);
+				document.getElementById("lower-third-1").classList.replace("right", alt_1_align);
+			}
+			alt_1_align_old = alt_1_align;
+
+			if (alt_2_align != alt_2_align_old){
+				if (alt_2_switch == "false"){
+					document.getElementById("lower-third-2").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-2").classList.replace("left", alt_2_align);
+				document.getElementById("lower-third-2").classList.replace("center", alt_2_align);
+				document.getElementById("lower-third-2").classList.replace("right", alt_2_align);
+			}
+			alt_2_align_old = alt_2_align;
+
+			if (alt_3_align != alt_3_align_old){
+				if (alt_3_switch == "false"){
+					document.getElementById("lower-third-3").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-3").classList.replace("left", alt_3_align);
+				document.getElementById("lower-third-3").classList.replace("center", alt_3_align);
+				document.getElementById("lower-third-3").classList.replace("right", alt_3_align);
+			}
+			alt_3_align_old = alt_3_align;
+
+			if (alt_4_align != alt_4_align_old){
+				if (alt_4_switch == "false"){
+					document.getElementById("lower-third-4").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-4").classList.replace("left", alt_4_align);
+				document.getElementById("lower-third-4").classList.replace("center", alt_4_align);
+				document.getElementById("lower-third-4").classList.replace("right", alt_4_align);
+			}
+			alt_4_align_old = alt_4_align;
+
+      if (alt_5_align != alt_5_align_old){
+				if (alt_5_switch == "false"){
+					document.getElementById("lower-third-5").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-5").classList.replace("left", alt_5_align);
+				document.getElementById("lower-third-5").classList.replace("center", alt_5_align);
+				document.getElementById("lower-third-5").classList.replace("right", alt_5_align);
+			}
+			alt_5_align_old = alt_5_align;
+
+      if (alt_6_align != alt_6_align_old){
+        if (alt_6_switch == "false"){
+          document.getElementById("lower-third-6").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-6").classList.replace("left", alt_6_align);
+        document.getElementById("lower-third-6").classList.replace("center", alt_6_align);
+        document.getElementById("lower-third-6").classList.replace("right", alt_6_align);
+      }
+      alt_6_align_old = alt_6_align;
+
+      if (alt_7_align != alt_7_align_old){
+        if (alt_7_switch == "false"){
+          document.getElementById("lower-third-7").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-7").classList.replace("left", alt_7_align);
+        document.getElementById("lower-third-7").classList.replace("center", alt_7_align);
+        document.getElementById("lower-third-7").classList.replace("right", alt_7_align);
+      }
+      alt_7_align_old = alt_7_align;
+
+      if (alt_8_align != alt_8_align_old){
+        if (alt_8_switch == "false"){
+          document.getElementById("lower-third-8").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-8").classList.replace("left", alt_8_align);
+        document.getElementById("lower-third-8").classList.replace("center", alt_8_align);
+        document.getElementById("lower-third-8").classList.replace("right", alt_8_align);
+      }
+      alt_8_align_old = alt_8_align;
+
+			//Change the style of the lower third
+			if (alt_1_style != alt_1_style_old){
+				if (alt_1_switch == "false"){
+					document.getElementById("lower-third-1").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-1").classList.replace("style-1", "style-" + alt_1_style);
+				document.getElementById("lower-third-1").classList.replace("style-2", "style-" + alt_1_style);
+				document.getElementById("lower-third-1").classList.replace("style-3", "style-" + alt_1_style);
+				//document.getElementById("lower-third-1").classList.replace("style-4", "style-" + alt_1_style);
+				//document.getElementById("lower-third-1").classList.replace("style-5", "style-" + alt_1_style);
+			}
+			alt_1_style_old = alt_1_style;
+
+			if (alt_2_style != alt_2_style_old){
+				if (alt_2_switch == "false"){
+					document.getElementById("lower-third-2").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-2").classList.replace("style-1", "style-" + alt_2_style);
+				document.getElementById("lower-third-2").classList.replace("style-2", "style-" + alt_2_style);
+				document.getElementById("lower-third-2").classList.replace("style-3", "style-" + alt_2_style);
+			}
+			alt_2_style_old = alt_2_style;
+
+			if (alt_3_style != alt_3_style_old){
+				if (alt_3_switch == "false"){
+					document.getElementById("lower-third-3").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-3").classList.replace("style-1", "style-" + alt_3_style);
+				document.getElementById("lower-third-3").classList.replace("style-2", "style-" + alt_3_style);
+				document.getElementById("lower-third-3").classList.replace("style-3", "style-" + alt_3_style);
+			}
+			alt_3_style_old = alt_3_style;
+
+			if (alt_4_style != alt_4_style_old){
+				if (alt_4_switch == "false"){
+					document.getElementById("lower-third-4").classList.add("hide-anim");
+				}
+				document.getElementById("lower-third-4").classList.replace("style-1", "style-" + alt_4_style);
+				document.getElementById("lower-third-4").classList.replace("style-2", "style-" + alt_4_style);
+				document.getElementById("lower-third-4").classList.replace("style-3", "style-" + alt_4_style);
+			}
+			alt_4_style_old = alt_4_style;
+
+      if (alt_5_style != alt_5_style_old){
+        if (alt_5_switch == "false"){
+          document.getElementById("lower-third-5").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-5").classList.replace("style-1", "style-" + alt_5_style);
+        document.getElementById("lower-third-5").classList.replace("style-2", "style-" + alt_5_style);
+        document.getElementById("lower-third-5").classList.replace("style-3", "style-" + alt_5_style);
+      }
+      alt_5_style_old = alt_5_style;
+
+      if (alt_6_style != alt_6_style_old){
+        if (alt_6_switch == "false"){
+          document.getElementById("lower-third-6").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-6").classList.replace("style-1", "style-" + alt_6_style);
+        document.getElementById("lower-third-6").classList.replace("style-2", "style-" + alt_6_style);
+        document.getElementById("lower-third-6").classList.replace("style-3", "style-" + alt_6_style);
+      }
+      alt_6_style_old = alt_6_style;
+
+      if (alt_7_style != alt_7_style_old){
+        if (alt_7_switch == "false"){
+          document.getElementById("lower-third-7").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-7").classList.replace("style-1", "style-" + alt_7_style);
+        document.getElementById("lower-third-7").classList.replace("style-2", "style-" + alt_7_style);
+        document.getElementById("lower-third-7").classList.replace("style-3", "style-" + alt_7_style);
+      }
+      alt_7_style_old = alt_7_style;
+
+      if (alt_8_style != alt_8_style_old){
+        if (alt_8_switch == "false"){
+          document.getElementById("lower-third-8").classList.add("hide-anim");
+        }
+        document.getElementById("lower-third-8").classList.replace("style-1", "style-" + alt_8_style);
+        document.getElementById("lower-third-8").classList.replace("style-2", "style-" + alt_8_style);
+        document.getElementById("lower-third-8").classList.replace("style-3", "style-" + alt_8_style);
+      }
+      alt_8_style_old = alt_8_style;
+
+			///////////////////////////
+
+			//Load logo when it change
+			if (alt_1_logo_image != alt_1_logo_image_old) {
+				loadLogo("alt-1-logo", alt_1_logo_image);
+			}
+			alt_1_logo_image_old = alt_1_logo_image;
+
+			if (alt_2_logo_image != alt_2_logo_image_old) {
+				loadLogo("alt-2-logo", alt_2_logo_image);
+			}
+			alt_2_logo_image_old = alt_2_logo_image;
+
+			if (alt_3_logo_image != alt_3_logo_image_old) {
+				loadLogo("alt-3-logo", alt_3_logo_image);
+			}
+			alt_3_logo_image_old = alt_3_logo_image;
+
+			if (alt_4_logo_image != alt_4_logo_image_old) {
+				loadLogo("alt-4-logo", alt_4_logo_image);
+			}
+			alt_4_logo_image_old = alt_4_logo_image;
+
+      if (alt_5_logo_image != alt_5_logo_image_old) {
+        loadLogo("alt-5-logo", alt_5_logo_image);
+      }
+      alt_5_logo_image_old = alt_5_logo_image;
+
+      if (alt_6_logo_image != alt_6_logo_image_old) {
+        loadLogo("alt-6-logo", alt_6_logo_image);
+      }
+      alt_6_logo_image_old = alt_6_logo_image;
+
+      if (alt_7_logo_image != alt_7_logo_image_old) {
+        loadLogo("alt-7-logo", alt_7_logo_image);
+      }
+      alt_7_logo_image_old = alt_7_logo_image;
+
+      if (alt_8_logo_image != alt_8_logo_image_old) {
+        loadLogo("alt-8-logo", alt_8_logo_image);
+      }
+      alt_8_logo_image_old = alt_8_logo_image;
+
+
+			//Show or hide if logo switch is ON.
+			if (alt_1_logo_switch == "true"){
+				//Show when change and is active
+				if ($("#lower-third-1").hasClass("animation-in")) {
+					if (!hide_logo_1) {
+						clearTimeout(alt_1_wait_hide_logo);
+						hide_logo_1 = true;
+						$("#alt-1-logo").removeClass("no-logo");
+						loadLogo("alt-1-logo", alt_1_logo_image);
+					}
+				} else {
+					//Hide when change and is inactive
+					if (hide_logo_1) {
+						hide_logo_1 = false;
+						alt_1_wait_hide_logo = setTimeout(function () {
+							$("#alt-1-logo").addClass("no-logo");
+							loadLogo("alt-1-logo", "");
+						}, alt_1_animation_time * 1000);
+					}
+				}
+			} else {
+				hide_logo_1 = false;
+				$("#alt-1-logo").addClass("no-logo");
+				loadLogo("alt-1-logo", "");
+			}
+
+			if (alt_2_logo_switch == "true"){
+				if ($("#lower-third-2").hasClass("animation-in")) {
+					if (!hide_logo_2) {
+						clearTimeout(alt_2_wait_hide_logo);
+						hide_logo_2 = true;
+						$("#alt-2-logo").removeClass("no-logo");
+						loadLogo("alt-2-logo", alt_2_logo_image);
+					}
+				} else {
+					if (hide_logo_2) {
+						hide_logo_2 = false;
+						alt_2_wait_hide_logo = setTimeout(function () {
+							$("#alt-2-logo").addClass("no-logo");
+							loadLogo("alt-2-logo", "");
+						}, alt_2_animation_time * 1000);
+					}
+				}
+			} else {
+				$("#alt-2-logo").addClass("no-logo");
+				loadLogo("alt-2-logo", "");
+			}
+
+			if (alt_3_logo_switch == "true"){
+				if ($("#lower-third-3").hasClass("animation-in")) {
+					if (!hide_logo_3) {
+						clearTimeout(alt_3_wait_hide_logo);
+						hide_logo_3 = true;
+						$("#alt-3-logo").removeClass("no-logo");
+						loadLogo("alt-3-logo", alt_3_logo_image);
+					}
+				} else {
+					if (hide_logo_3) {
+						hide_logo_3 = false;
+						alt_3_wait_hide_logo = setTimeout(function () {
+							$("#alt-3-logo").addClass("no-logo");
+							loadLogo("alt-3-logo", "");
+						}, alt_3_animation_time * 1000);
+					}
+				}
+			} else {
+				$("#alt-3-logo").addClass("no-logo");
+				loadLogo("alt-3-logo", "");
+			}
+
+			if (alt_4_logo_switch == "true"){
+				if ($("#lower-third-4").hasClass("animation-in")) {
+					if (!hide_logo_4) {
+						clearTimeout(alt_4_wait_hide_logo);
+						hide_logo_4 = true;
+						$("#alt-4-logo").removeClass("no-logo");
+						loadLogo("alt-4-logo", alt_4_logo_image);
+					}
+				} else {
+					if (hide_logo_4) {
+						hide_logo_4 = false;
+						alt_4_wait_hide_logo = setTimeout(function () {
+							$("#alt-4-logo").addClass("no-logo");
+							loadLogo("alt-4-logo", "");
+						}, alt_4_animation_time * 1000);
+					}
+				}
+			} else {
+				$("#alt-4-logo").addClass("no-logo");
+				loadLogo("alt-4-logo", "");
+			}
+
+      if (alt_5_logo_switch == "true"){
+				if ($("#lower-third-5").hasClass("animation-in")) {
+					if (!hide_logo_5) {
+						clearTimeout(alt_5_wait_hide_logo);
+						hide_logo_5 = true;
+						$("#alt-5-logo").removeClass("no-logo");
+						loadLogo("alt-5-logo", alt_5_logo_image);
+					}
+				} else {
+					if (hide_logo_5) {
+						hide_logo_5 = false;
+						alt_5_wait_hide_logo = setTimeout(function () {
+							$("#alt-5-logo").addClass("no-logo");
+							loadLogo("alt-5-logo", "");
+						}, alt_5_animation_time * 1000);
+					}
+				}
+			} else {
+				$("#alt-5-logo").addClass("no-logo");
+				loadLogo("alt-5-logo", "");
+			}
+
+      if (alt_6_logo_switch == "true"){
+        if ($("#lower-third-6").hasClass("animation-in")) {
+          if (!hide_logo_6) {
+            clearTimeout(alt_6_wait_hide_logo);
+            hide_logo_6 = true;
+            $("#alt-6-logo").removeClass("no-logo");
+            loadLogo("alt-6-logo", alt_6_logo_image);
+          }
+        } else {
+          if (hide_logo_6) {
+            hide_logo_6 = false;
+            alt_6_wait_hide_logo = setTimeout(function () {
+              $("#alt-6-logo").addClass("no-logo");
+              loadLogo("alt-6-logo", "");
+            }, alt_6_animation_time * 1000);
+          }
+        }
+      } else {
+        $("#alt-6-logo").addClass("no-logo");
+        loadLogo("alt-6-logo", "");
+      }
+
+      if (alt_7_logo_switch == "true"){
+        if ($("#lower-third-7").hasClass("animation-in")) {
+          if (!hide_logo_7) {
+            clearTimeout(alt_7_wait_hide_logo);
+            hide_logo_7 = true;
+            $("#alt-7-logo").removeClass("no-logo");
+            loadLogo("alt-7-logo", alt_7_logo_image);
+          }
+        } else {
+          if (hide_logo_7) {
+            hide_logo_7 = false;
+            alt_7_wait_hide_logo = setTimeout(function () {
+              $("#alt-7-logo").addClass("no-logo");
+              loadLogo("alt-7-logo", "");
+            }, alt_7_animation_time * 1000);
+          }
+        }
+      } else {
+        $("#alt-7-logo").addClass("no-logo");
+        loadLogo("alt-7-logo", "");
+      }
+
+      if (alt_8_logo_switch == "true"){
+        if ($("#lower-third-8").hasClass("animation-in")) {
+          if (!hide_logo_8) {
+            clearTimeout(alt_8_wait_hide_logo);
+            hide_logo_8 = true;
+            $("#alt-8-logo").removeClass("no-logo");
+            loadLogo("alt-8-logo", alt_8_logo_image);
+          }
+        } else {
+          if (hide_logo_8) {
+            hide_logo_8 = false;
+            alt_8_wait_hide_logo = setTimeout(function () {
+              $("#alt-8-logo").addClass("no-logo");
+              loadLogo("alt-8-logo", "");
+            }, alt_8_animation_time * 1000);
+          }
+        }
+      } else {
+        $("#alt-8-logo").addClass("no-logo");
+        loadLogo("alt-8-logo", "");
+      }
+
+			//Help to update logo when logo switch is ON
+			if (alt_1_logo_switch != alt_1_logo_switch_old){
+				hide_logo_1 = false;
+			}
+			alt_1_logo_switch_old = alt_1_logo_switch;
+
+			if (alt_2_logo_switch != alt_2_logo_switch_old){
+				hide_logo_2 = false;
+			}
+			alt_2_logo_switch_old = alt_2_logo_switch;
+
+			if (alt_3_logo_switch != alt_3_logo_switch_old){
+				hide_logo_3 = false;
+			}
+			alt_3_logo_switch_old = alt_3_logo_switch;
+
+			if (alt_4_logo_switch != alt_4_logo_switch_old){
+				hide_logo_4 = false;
+			}
+			alt_4_logo_switch_old = alt_4_logo_switch;
+
+      if (alt_5_logo_switch != alt_5_logo_switch_old){
+        hide_logo_5 = false;
+      }
+      alt_5_logo_switch_old = alt_5_logo_switch;
+
+      if (alt_6_logo_switch != alt_6_logo_switch_old){
+        hide_logo_6 = false;
+      }
+      alt_6_logo_switch_old = alt_6_logo_switch;
+
+      if (alt_7_logo_switch != alt_7_logo_switch_old){
+        hide_logo_7 = false;
+      }
+      alt_7_logo_switch_old = alt_7_logo_switch;
+
+      if (alt_8_logo_switch != alt_8_logo_switch_old){
+        hide_logo_8 = false;
+      }
+      alt_8_logo_switch_old = alt_8_logo_switch;
+
+			///////////////////////////
+
+			let root = document.documentElement;
+
+			//Show or hide Background
+			if (alt_1_background_switch == "true"){
+				root.style.setProperty('--alt-1-background', "1");
+			} else {
+				root.style.setProperty('--alt-1-background', "0");
+			}
+			if (alt_2_background_switch == "true"){
+				root.style.setProperty('--alt-2-background', "1");
+			} else {
+				root.style.setProperty('--alt-2-background', "0");
+			}
+			if (alt_3_background_switch == "true"){
+				root.style.setProperty('--alt-3-background', "1");
+			} else {
+				root.style.setProperty('--alt-3-background', "0");
+			}
+			if (alt_4_background_switch == "true"){
+				root.style.setProperty('--alt-4-background', "1");
+			} else {
+				root.style.setProperty('--alt-4-background', "0");
+			}
+      if (alt_5_background_switch == "true"){
+        root.style.setProperty('--alt-5-background', "1");
+      } else {
+        root.style.setProperty('--alt-5-background', "0");
+      }
+      if (alt_6_background_switch == "true"){
+        root.style.setProperty('--alt-6-background', "1");
+      } else {
+        root.style.setProperty('--alt-6-background', "0");
+      }
+      if (alt_7_background_switch == "true"){
+        root.style.setProperty('--alt-7-background', "1");
+      } else {
+        root.style.setProperty('--alt-7-background', "0");
+      }
+      if (alt_8_background_switch == "true"){
+        root.style.setProperty('--alt-8-background', "1");
+      } else {
+        root.style.setProperty('--alt-8-background', "0");
+      }
+
+			//root.style.setProperty('--animation-time', global_animation_time + "s"); no hace falta enviar el global
+			root.style.setProperty('--alt-1-animation-time', alt_1_animation_time + "s");
+			root.style.setProperty('--alt-2-animation-time', alt_2_animation_time + "s");
+			root.style.setProperty('--alt-3-animation-time', alt_3_animation_time + "s");
+			root.style.setProperty('--alt-4-animation-time', alt_4_animation_time + "s");
+      root.style.setProperty('--alt-5-animation-time', alt_5_animation_time + "s");
+      root.style.setProperty('--alt-5-animation-time', alt_6_animation_time + "s");
+      root.style.setProperty('--alt-5-animation-time', alt_7_animation_time + "s");
+      root.style.setProperty('--alt-5-animation-time', alt_8_animation_time + "s");
+
+			//texts styling
+			root.style.setProperty('--alt-1-size', alt_1_size + "px");
+			root.style.setProperty('--alt-1-margin-h', alt_1_margin_h + "rem");
+			root.style.setProperty('--alt-1-margin-v', alt_1_margin_v + "rem");
+			root.style.setProperty('--alt-1-line-spacing', alt_1_line_spacing + "em");
+			root.style.setProperty('--alt-1-name-size', alt_1_name_size + "em");
+			root.style.setProperty('--alt-1-info-size', alt_1_info_size + "em");
+			root.style.setProperty('--alt-1-name-transform', alt_1_name_transform);
+			root.style.setProperty('--alt-1-info-transform', alt_1_info_transform);
+			root.style.setProperty('--alt-1-name-weight', alt_1_name_weight);
+			root.style.setProperty('--alt-1-info-weight', alt_1_info_weight);
+			root.style.setProperty('--alt-1-name-color', alt_1_name_color);
+			root.style.setProperty('--alt-1-info-color', alt_1_info_color);
+			root.style.setProperty('--alt-1-style-color-1', alt_1_style_color_1);
+			root.style.setProperty('--alt-1-style-color-2', alt_1_style_color_2);
+			root.style.setProperty('--alt-1-font', alt_1_font);
+
+			root.style.setProperty('--alt-2-size', alt_2_size + "px");
+			root.style.setProperty('--alt-2-margin-h', alt_2_margin_h + "rem");
+			root.style.setProperty('--alt-2-margin-v', alt_2_margin_v + "rem");
+			root.style.setProperty('--alt-2-line-spacing', alt_2_line_spacing + "em");
+			root.style.setProperty('--alt-2-name-size', alt_2_name_size + "em");
+			root.style.setProperty('--alt-2-info-size', alt_2_info_size + "em");
+			root.style.setProperty('--alt-2-name-transform', alt_2_name_transform);
+			root.style.setProperty('--alt-2-info-transform', alt_2_info_transform);
+			root.style.setProperty('--alt-2-name-weight', alt_2_name_weight);
+			root.style.setProperty('--alt-2-info-weight', alt_2_info_weight);
+			root.style.setProperty('--alt-2-name-color', alt_2_name_color);
+			root.style.setProperty('--alt-2-info-color', alt_2_info_color);
+			root.style.setProperty('--alt-2-style-color-1', alt_2_style_color_1);
+			root.style.setProperty('--alt-2-style-color-2', alt_2_style_color_2);
+			root.style.setProperty('--alt-2-font', alt_2_font);
+
+			root.style.setProperty('--alt-3-size', alt_3_size + "px");
+			root.style.setProperty('--alt-3-margin-h', alt_3_margin_h + "rem");
+			root.style.setProperty('--alt-3-margin-v', alt_3_margin_v + "rem");
+			root.style.setProperty('--alt-3-line-spacing', alt_3_line_spacing + "em");
+			root.style.setProperty('--alt-3-name-size', alt_3_name_size + "em");
+			root.style.setProperty('--alt-3-info-size', alt_3_info_size + "em");
+			root.style.setProperty('--alt-3-name-transform', alt_3_name_transform);
+			root.style.setProperty('--alt-3-info-transform', alt_3_info_transform);
+			root.style.setProperty('--alt-3-name-weight', alt_3_name_weight);
+			root.style.setProperty('--alt-3-info-weight', alt_3_info_weight);
+			root.style.setProperty('--alt-3-name-color', alt_3_name_color);
+			root.style.setProperty('--alt-3-info-color', alt_3_info_color);
+			root.style.setProperty('--alt-3-style-color-1', alt_3_style_color_1);
+			root.style.setProperty('--alt-3-style-color-2', alt_3_style_color_2);
+			root.style.setProperty('--alt-3-font', alt_3_font);
+
+			root.style.setProperty('--alt-4-size', alt_4_size + "px");
+			root.style.setProperty('--alt-4-margin-h', alt_4_margin_h + "rem");
+			root.style.setProperty('--alt-4-margin-v', alt_4_margin_v + "rem");
+			root.style.setProperty('--alt-4-line-spacing', alt_4_line_spacing + "em");
+			root.style.setProperty('--alt-4-name-size', alt_4_name_size + "em");
+			root.style.setProperty('--alt-4-info-size', alt_4_info_size + "em");
+			root.style.setProperty('--alt-4-name-transform', alt_4_name_transform);
+			root.style.setProperty('--alt-4-info-transform', alt_4_info_transform);
+			root.style.setProperty('--alt-4-name-weight', alt_4_name_weight);
+			root.style.setProperty('--alt-4-info-weight', alt_4_info_weight);
+			root.style.setProperty('--alt-4-name-color', alt_4_name_color);
+			root.style.setProperty('--alt-4-info-color', alt_4_info_color);
+			root.style.setProperty('--alt-4-style-color-1', alt_4_style_color_1);
+			root.style.setProperty('--alt-4-style-color-2', alt_4_style_color_2);
+			root.style.setProperty('--alt-4-font', alt_4_font);
+
+      root.style.setProperty('--alt-5-size', alt_5_size + "px");
+      root.style.setProperty('--alt-5-margin-h', alt_5_margin_h + "rem");
+      root.style.setProperty('--alt-5-margin-v', alt_5_margin_v + "rem");
+      root.style.setProperty('--alt-5-line-spacing', alt_5_line_spacing + "em");
+      root.style.setProperty('--alt-5-name-size', alt_5_name_size + "em");
+      root.style.setProperty('--alt-5-info-size', alt_5_info_size + "em");
+      root.style.setProperty('--alt-5-name-transform', alt_5_name_transform);
+      root.style.setProperty('--alt-5-info-transform', alt_5_info_transform);
+      root.style.setProperty('--alt-5-name-weight', alt_5_name_weight);
+      root.style.setProperty('--alt-5-info-weight', alt_5_info_weight);
+      root.style.setProperty('--alt-5-name-color', alt_5_name_color);
+      root.style.setProperty('--alt-5-info-color', alt_5_info_color);
+      root.style.setProperty('--alt-5-style-color-1', alt_5_style_color_1);
+      root.style.setProperty('--alt-5-style-color-2', alt_5_style_color_2);
+      root.style.setProperty('--alt-5-font', alt_5_font);
+
+      root.style.setProperty('--alt-6-size', alt_6_size + "px");
+      root.style.setProperty('--alt-6-margin-h', alt_6_margin_h + "rem");
+      root.style.setProperty('--alt-6-margin-v', alt_6_margin_v + "rem");
+      root.style.setProperty('--alt-6-line-spacing', alt_6_line_spacing + "em");
+      root.style.setProperty('--alt-6-name-size', alt_6_name_size + "em");
+      root.style.setProperty('--alt-6-info-size', alt_6_info_size + "em");
+      root.style.setProperty('--alt-6-name-transform', alt_6_name_transform);
+      root.style.setProperty('--alt-6-info-transform', alt_6_info_transform);
+      root.style.setProperty('--alt-6-name-weight', alt_6_name_weight);
+      root.style.setProperty('--alt-6-info-weight', alt_6_info_weight);
+      root.style.setProperty('--alt-6-name-color', alt_6_name_color);
+      root.style.setProperty('--alt-6-info-color', alt_6_info_color);
+      root.style.setProperty('--alt-6-style-color-1', alt_6_style_color_1);
+      root.style.setProperty('--alt-6-style-color-2', alt_6_style_color_2);
+      root.style.setProperty('--alt-6-font', alt_6_font);
+
+      root.style.setProperty('--alt-7-size', alt_7_size + "px");
+      root.style.setProperty('--alt-7-margin-h', alt_7_margin_h + "rem");
+      root.style.setProperty('--alt-7-margin-v', alt_7_margin_v + "rem");
+      root.style.setProperty('--alt-7-line-spacing', alt_7_line_spacing + "em");
+      root.style.setProperty('--alt-7-name-size', alt_7_name_size + "em");
+      root.style.setProperty('--alt-7-info-size', alt_7_info_size + "em");
+      root.style.setProperty('--alt-7-name-transform', alt_7_name_transform);
+      root.style.setProperty('--alt-7-info-transform', alt_7_info_transform);
+      root.style.setProperty('--alt-7-name-weight', alt_7_name_weight);
+      root.style.setProperty('--alt-7-info-weight', alt_7_info_weight);
+      root.style.setProperty('--alt-7-name-color', alt_7_name_color);
+      root.style.setProperty('--alt-7-info-color', alt_7_info_color);
+      root.style.setProperty('--alt-7-style-color-1', alt_7_style_color_1);
+      root.style.setProperty('--alt-7-style-color-2', alt_7_style_color_2);
+      root.style.setProperty('--alt-7-font', alt_7_font);
+
+      root.style.setProperty('--alt-8-size', alt_8_size + "px");
+      root.style.setProperty('--alt-8-margin-h', alt_8_margin_h + "rem");
+      root.style.setProperty('--alt-8-margin-v', alt_8_margin_v + "rem");
+      root.style.setProperty('--alt-8-line-spacing', alt_8_line_spacing + "em");
+      root.style.setProperty('--alt-8-name-size', alt_8_name_size + "em");
+      root.style.setProperty('--alt-8-info-size', alt_8_info_size + "em");
+      root.style.setProperty('--alt-8-name-transform', alt_8_name_transform);
+      root.style.setProperty('--alt-8-info-transform', alt_8_info_transform);
+      root.style.setProperty('--alt-8-name-weight', alt_8_name_weight);
+      root.style.setProperty('--alt-8-info-weight', alt_8_info_weight);
+      root.style.setProperty('--alt-8-name-color', alt_8_name_color);
+      root.style.setProperty('--alt-8-info-color', alt_8_info_color);
+      root.style.setProperty('--alt-8-style-color-1', alt_8_style_color_1);
+      root.style.setProperty('--alt-8-style-color-2', alt_8_style_color_2);
+      root.style.setProperty('--alt-8-font', alt_8_font);
+
+			//alt_1_shadows
+			if (alt_1_shadows == "false") {
+				root.style.setProperty('--alt-1-shadows', "none");
+			} else if (alt_1_shadows == "true") {
+				root.style.setProperty('--alt-1-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+			if (alt_2_shadows == "false") {
+				root.style.setProperty('--alt-2-shadows', "none");
+			} else if (alt_2_shadows == "true") {
+				root.style.setProperty('--alt-2-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+			if (alt_3_shadows == "false") {
+				root.style.setProperty('--alt-3-shadows', "none");
+			} else if (alt_3_shadows == "true") {
+				root.style.setProperty('--alt-3-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+			if (alt_4_shadows == "false") {
+				root.style.setProperty('--alt-4-shadows', "none");
+			} else if (alt_4_shadows == "true") {
+				root.style.setProperty('--alt-4-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+      if (alt_5_shadows == "false") {
+				root.style.setProperty('--alt-5-shadows', "none");
+			} else if (alt_5_shadows == "true") {
+				root.style.setProperty('--alt-5-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+      if (alt_6_shadows == "false") {
+				root.style.setProperty('--alt-6-shadows', "none");
+			} else if (alt_6_shadows == "true") {
+				root.style.setProperty('--alt-6-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+      if (alt_7_shadows == "false") {
+				root.style.setProperty('--alt-7-shadows', "none");
+			} else if (alt_7_shadows == "true") {
+				root.style.setProperty('--alt-7-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+      if (alt_8_shadows == "false") {
+				root.style.setProperty('--alt-8-shadows', "none");
+			} else if (alt_8_shadows == "true") {
+				root.style.setProperty('--alt-8-shadows', "0.1rem 0.1rem 0.2rem #00000060");
+			}
+
+		}
+
+		bcf.onmessage = function (ev) {
+			received_data=ev.data.split("|");
+			new_font = received_data[0];
+
+			//console.log(new_font);
+			$('head').append('<style>' + new_font + '</style>');
+		}
+
+		function loadLogo(alt,logo) {
+			if(logo){
+				document.getElementById(alt).innerHTML = '<img src="' + logo + '"></div>';
+			} else {
+				document.getElementById(alt).innerHTML = '';
+			}
+		}
+
+
+		//Send data to Control Panel
+		function function_send() {
+			activeTime1_to_send = c1 - 1;
+			inactiveTime1_to_send = d1 - 1;
+			activeTime2_to_send = c2 - 1;
+			inactiveTime2_to_send = d2 - 1;
+			activeTime3_to_send = c3 - 1;
+			inactiveTime3_to_send = d3 - 1;
+			activeTime4_to_send = c4 - 1;
+			inactiveTime4_to_send = d4 - 1;
+      activeTime5_to_send = c5 - 1;
+      inactiveTime5_to_send = d5 - 1;
+      activeTime6_to_send = c6 - 1;
+      inactiveTime6_to_send = d6 - 1;
+      activeTime7_to_send = c7 - 1;
+      inactiveTime7_to_send = d7 - 1;
+      activeTime8_to_send = c8 - 1;
+      inactiveTime8_to_send = d8 - 1;
+
+			if (activeTime1_to_send < 0){
+				activeTime1_to_send = 0;
+			}
+			if (inactiveTime1_to_send < 0){
+				inactiveTime1_to_send = 0;
+			}
+			if (activeTime2_to_send < 0){
+				activeTime2_to_send = 0;
+			}
+			if (inactiveTime2_to_send < 0){
+				inactiveTime2_to_send = 0;
+			}
+			if (activeTime3_to_send < 0){
+				activeTime3_to_send = 0;
+			}
+			if (inactiveTime3_to_send < 0){
+				inactiveTime3_to_send = 0;
+			}
+			if (activeTime4_to_send < 0){
+				activeTime4_to_send = 0;
+			}
+			if (inactiveTime4_to_send < 0){
+				inactiveTime4_to_send = 0;
+			}
+      if (activeTime5_to_send < 0){
+        activeTime5_to_send = 0;
+      }
+      if (inactiveTime5_to_send < 0){
+        inactiveTime5_to_send = 0;
+      }
+      if (activeTime6_to_send < 0){
+        activeTime6_to_send = 0;
+      }
+      if (inactiveTime6_to_send < 0){
+        inactiveTime6_to_send = 0;
+      }
+      if (activeTime7_to_send < 0){
+        activeTime7_to_send = 0;
+      }
+      if (inactiveTime7_to_send < 0){
+        inactiveTime7_to_send = 0;
+      }
+      if (activeTime8_to_send < 0){
+        activeTime8_to_send = 0;
+      }
+      if (inactiveTime8_to_send < 0){
+        inactiveTime8_to_send = 0;
+      }
+
+      var msgToPost = activeTime1_to_send + '|' + inactiveTime1_to_send;
+      msgToPost = msgToPost + '|' + activeTime2_to_send + '|' + inactiveTime2_to_send;
+      msgToPost = msgToPost + '|' + activeTime3_to_send + '|' + inactiveTime3_to_send;
+      msgToPost = msgToPost + '|' + activeTime4_to_send + '|' + inactiveTime4_to_send;
+      msgToPost = msgToPost + '|' + activeTime5_to_send + '|' + inactiveTime5_to_send;
+      msgToPost = msgToPost + '|' + activeTime6_to_send + '|' + inactiveTime6_to_send;
+      msgToPost = msgToPost + '|' + activeTime7_to_send + '|' + inactiveTime7_to_send;
+      msgToPost = msgToPost + '|' + activeTime8_to_send + '|' + inactiveTime8_to_send;
+
+      bcr.postMessage(msgToPost);
+		}
+
+		function refreshData() {
+		    x = 0.05; // Refresh time miltiplier
+
+		    if (mode != "preview"){
+		    	function_send();
+		    }
+
+		    setTimeout(refreshData, x*1000);
+		}
+		refreshData();
+
+	</script>
+
+  </body>
+</html>
